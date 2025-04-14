@@ -17,159 +17,135 @@ function listen(e) {
     }, 1000);
   }
   
-  function search(e) {
-    e.preventDefault();
-    const search = document.getElementById("input").value;
-    if (search.trim() === "") return;
-    document.activeElement.blur(); // this removes focus on the input bar after search
-  
-    console.log("Working");
-    $.ajax({
-      url: `https://www.googleapis.com/books/v1/volumes?q="${search}"&maxResults=20`,
-      dataType: "json",
-      beforeSend: function () {
-        $(".whirly-loader").show();
-      },
-      complete: function () {
-        $(".whirly-loader").hide();
-      },
-  
-      success: function (res) {
-        const resultsContainer = document.getElementById("results");
-        while (resultsContainer.firstChild) {
-          resultsContainer.removeChild(resultsContainer.firstChild);
+// main.js (Corrected and enhanced with genre search functionality)
+
+function search(e) {
+  e.preventDefault();
+  const search = document.getElementById("input").value.trim();
+  if (search === "") return;
+
+  document.activeElement.blur();
+  console.log("Searching for:", search);
+
+  const isGenre = [
+    "fiction", "romance", "mystery", "thriller", "fantasy",
+    "biography", "history", "science", "horror", "poetry"
+  ].includes(search.toLowerCase());
+
+  let query = isGenre ? `subject:${search}` : `"${search}"`;
+
+  $.ajax({
+    url: `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=10`,
+    type: "GET",
+    dataType: "json",
+    beforeSend: function () {
+      $(".whirly-loader").show();
+    },
+    complete: function () {
+      $(".whirly-loader").hide();
+    },
+    success: function (res) {
+      const resultsContainer = document.getElementById("results");
+      resultsContainer.innerHTML = "";
+
+      if (res.totalItems === 0) {
+        let notfound = document.createElement("DIV");
+        notfound.innerHTML = `
+        <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center text-center text-sm-left error-page">
+            <img src="./img/file-not-found.gif" alt="404 error" width="100" height="100" class="m-2">
+            <div>
+              <p class="fs-3"> <span class="text-danger">Oops!</span> Book not found.</p>
+              <p class="lead">The book you’re looking for doesn’t exist.</p>
+            </div>
+        </div>`;
+        resultsContainer.appendChild(notfound);
+        return;
+      }
+
+      for (let i = 0; i < res.items.length; i++) {
+        const bookCard = document.createElement("div");
+        bookCard.classList.add("result", "row");
+        bookCard.setAttribute("data-aos", "fade-up");
+
+        // Image
+        let bookImageContainer = document.createElement("div");
+        bookImageContainer.classList.add("col-md-2", "offset-md-2");
+
+        if (res.items[i].volumeInfo.imageLinks) {
+          const bookImage = document.createElement("img");
+          bookImage.src = res.items[i].volumeInfo.imageLinks.smallThumbnail;
+          bookImage.classList.add("w-100");
+          bookImageContainer.appendChild(bookImage);
         }
-  
-        let bookNotFound = res.totalItems === 0;
-  
-        if (bookNotFound) {
-          // const errorBlock = document.createElement("div");
-          // const errorMessage = document.createElement("h1");
-          // errorMessage.textContent = "Book Not Found!";
-          // errorBlock.appendChild(errorMessage);
-          // document.getElementById("results").appendChild(errorBlock);
-  
-          let notfound = document.createElement("DIV");
-          notfound.innerHTML = `
-          <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center text-center text-sm-left error-page">
-              <img src="./img/file-not-found.gif" alt="404 error" width="100" height="100" class="m-2">
-              <div>
-                <p class="fs-3"> <span class="text-danger">Opps!</span> Book not found.</p>
-                <p class="lead">The book you’re looking for doesn’t exist.</p>
-              </div>
-          </div>
-          `;
-  
-          document.getElementById("results").appendChild(notfound);
-        } else {
-          for (let i = 0; i < res.items.length; i++) {
-            // DIV
-            const bookCard = document.createElement("div");
-  
-            // Image
-            if (res.items[i].volumeInfo.imageLinks) {
-              var bookImageContainer = document.createElement("div");
-              bookImageContainer.classList.add("col-md-2", "offset-md-2");
-  
-              const bookImage = document.createElement("img");
-              bookImage.src = res.items[i].volumeInfo.imageLinks.smallThumbnail;
-              bookImage.classList.add("w-100");
-  
-              bookImageContainer.appendChild(bookImage);
-            }
-  
-            // Title
-            const bookInfo = document.createElement("div");
-            bookInfo.classList.add("col-md-8");
-            const bookTitle = document.createElement("h1");
-            bookTitle.textContent = res.items[i].volumeInfo.title;
-  
-            //Author
-            if (res.items[i].volumeInfo.authors) {
-              var bookAuthor = document.createElement("h6");
-              bookAuthor.textContent = `by ${
-                res.items[i].volumeInfo.authors[0]
-                  ? res.items[i].volumeInfo.authors[0]
-                  : "No title"
-              }`;
-            }
-  
-            // Description
-            const bookDescription = document.createElement("p");
-            bookDescription.classList.add("description");
-            const desc = res.items[i].volumeInfo.description
-              ? res.items[i].volumeInfo.description
-              : "No description";
-  
-            const shortPar = document.createElement("span");
-            shortPar.classList.add("short-description");
-            const shortDesc = document.createTextNode(desc.substring(0, 100));
-            shortPar.appendChild(shortDesc);
-  
-            const remainingPar = document.createElement("span");
-            remainingPar.classList.add("remaining-description");
-            const remainingDesc = document.createTextNode(desc.substring(100));
-            remainingPar.appendChild(remainingDesc);
-  
-            const readMoreBtn = document.createElement("span");
-            readMoreBtn.classList.add("read-more-btn");
-            const readMoreBtnText = document.createTextNode(" ...Read More");
-            readMoreBtn.appendChild(readMoreBtnText);
-            readMoreBtn.addEventListener("click", () => {
-                // Redirect to book.html with book title and author as query parameters
-                const title = res.items[i].volumeInfo.title;
-                const author = res.items[i].volumeInfo.authors ? res.items[i].volumeInfo.authors[0] : "Unknown";
-                const description = desc;
-              
-                const url = `book.html?title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}&description=${encodeURIComponent(description)}`;
-                window.location.href = url;
-              });
-                
-            bookDescription.appendChild(shortPar);
-            bookDescription.appendChild(remainingPar);
-            if (desc !== "No description") {
-              bookDescription.appendChild(readMoreBtn);
-            }
-  
-            // Button
-            const bookPreviewLink = document.createElement("a");
-            bookPreviewLink.innerHTML = "READ";
-            bookPreviewLink.href = res.items[i].volumeInfo.previewLink;
-            bookPreviewLink.target = "blank";
-  
-            const speechButton = document.createElement("button");
-            speechButton.classList.add("listen", "btn", "btn-outline-secondary");
-            speechButton.textContent = "LISTEN";
-  
-            bookPreviewLink.classList.add("btn", "btn-outline-secondary");
-            bookCard.classList.add("result", "row");
-            bookCard.setAttribute("data-aos", "fade-up");
-  
-            bookInfo.append(
-                bookTitle,
-                bookAuthor,
-                bookDescription
-              );              
-  
-            bookCard.append(bookInfo, bookImageContainer);
-            document.getElementById("results").appendChild(bookCard);
-            document.getElementById("results").scrollIntoView();
-          }
-  
-          const speechButtons = document.querySelectorAll(".listen");
-  
-          for (const speechButton of speechButtons) {
-            speechButton.addEventListener("click", (e) => {
-              console.log("clicked");
-              listen(e);
-            });
-          }
+
+        // Info
+        const bookInfo = document.createElement("div");
+        bookInfo.classList.add("col-md-8");
+
+        const bookTitle = document.createElement("h1");
+        bookTitle.textContent = res.items[i].volumeInfo.title;
+
+        const bookAuthor = document.createElement("h6");
+        if (res.items[i].volumeInfo.authors) {
+          bookAuthor.textContent = `by ${res.items[i].volumeInfo.authors[0] || "No title"}`;
         }
-      },
-      maxResults: 30,
-      type: "GET",
-    });
-  }
+
+        const bookDescription = document.createElement("p");
+        bookDescription.classList.add("description");
+
+        const desc = res.items[i].volumeInfo.description || "No description";
+
+        const shortPar = document.createElement("span");
+        shortPar.classList.add("short-description");
+        shortPar.textContent = desc.substring(0, 100);
+
+        const remainingPar = document.createElement("span");
+        remainingPar.classList.add("remaining-description");
+        remainingPar.textContent = desc.substring(100);
+
+        const readMoreBtn = document.createElement("span");
+        readMoreBtn.classList.add("read-more-btn");
+        readMoreBtn.textContent = " ...Read More";
+        readMoreBtn.addEventListener("click", () => {
+          const title = res.items[i].volumeInfo.title;
+          const author = res.items[i].volumeInfo.authors ? res.items[i].volumeInfo.authors[0] : "Unknown";
+          const description = desc;
+
+          const url = `book.html?title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}&description=${encodeURIComponent(description)}`;
+          window.location.href = url;
+        });
+
+        bookDescription.append(shortPar, remainingPar);
+        if (desc !== "No description") {
+          bookDescription.appendChild(readMoreBtn);
+        }
+
+        const bookPreviewLink = document.createElement("a");
+        bookPreviewLink.innerHTML = "READ";
+        bookPreviewLink.href = res.items[i].volumeInfo.previewLink;
+        bookPreviewLink.target = "_blank";
+        bookPreviewLink.classList.add("btn", "btn-outline-secondary");
+
+        const speechButton = document.createElement("button");
+        speechButton.classList.add("listen", "btn", "btn-outline-secondary");
+        speechButton.textContent = "LISTEN";
+
+        bookInfo.append(bookTitle, bookAuthor, bookDescription);
+        bookCard.append(bookInfo, bookImageContainer);
+        resultsContainer.appendChild(bookCard);
+        resultsContainer.scrollIntoView();
+      }
+
+      const speechButtons = document.querySelectorAll(".listen");
+      for (const btn of speechButtons) {
+        btn.addEventListener("click", (e) => {
+          console.log("clicked");
+          listen(e); // ensure 'listen' function is defined elsewhere
+        });
+      }
+    }
+  });
+}
   
   document.querySelector(".search-form").addEventListener("submit", search);
   
