@@ -225,32 +225,60 @@
       <button class="arrow-btn arrow-left" onclick="scrollCarousel(-1)">&#10094;</button>
       <div class="character-carousel" id="carousel">
         <div class="character-card">
-          <img src="img/juliette.jpeg" alt="Juliette Ferrars" />
+          <img src="img/castle.jpeg" alt="Juliette Ferrars" />
           <p>Juliette Ferrars</p>
         </div>
         <div class="character-card">
-          <img src="img/aaron.jpeg" alt="Aaron Warner" />
+          <img src="https://via.placeholder.com/150x200?text=Warner" alt="Aaron Warner" />
           <p>Aaron Warner</p>
         </div>
         <div class="character-card">
-          <img src="img/adam.jpeg" alt="Adam Kent" />
+          <img src="https://via.placeholder.com/150x200?text=Adam" alt="Adam Kent" />
           <p>Adam Kent</p>
         </div>
         <div class="character-card">
-          <img src="img/kenji.jpeg" alt="Kenji Kishimoto" />
+          <img src="https://via.placeholder.com/150x200?text=Kenji" alt="Kenji Kishimoto" />
           <p>Kenji Kishimoto</p>
         </div>
         <div class="character-card">
-          <img src="img/james.jpeg" alt="James Kent" />
+          <img src="https://via.placeholder.com/150x200?text=James" alt="James Kent" />
           <p>James Kent</p>
         </div>
         <div class="character-card">
-          <img src="img/castle.jpeg" alt="Castle" />
+          <img src="https://via.placeholder.com/150x200?text=Castle" alt="Castle" />
           <p>Castle</p>
         </div>
       </div>
       <button class="arrow-btn arrow-right" onclick="scrollCarousel(1)">&#10095;</button>
     </div>
+  </div>
+  <!-- PLAYLIST SUGGESTIONS SECTION -->
+  <div class="info-box">
+    <h3>Scene-Based Playlist Suggestions</h3>
+
+    <!-- Preloaded fake suggestions -->
+    <div id="suggestionsList" style="margin-bottom: 30px;">
+      <div style="margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+        <p><strong>booklover99</strong> suggested <em>“Control” by Halsey</em></p>
+        <p><small>“when Juliette was first locked up and battling her inner demons”</small></p>
+      </div>
+      <div style="margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+        <p><strong>kenjifan4life</strong> suggested <em>“Demons” by Imagine Dragons</em></p>
+        <p><small>“when Warner sees Juliette’s power for the first time”</small></p>
+      </div>
+      <div style="margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+        <p><strong>juliette_rain</strong> suggested <em>“Lover” by Taylor Swift</em></p>
+        <p><small>“when Adam first touched Juliette”</small></p>
+      </div>
+    </div>
+
+    <!-- Add Suggestion Form -->
+    <form id="suggestionForm" style="margin-bottom: 10px;">
+      <input type="text" id="username" placeholder="Your Name" required style="margin-right: 10px; padding: 5px;" />
+      <input type="text" id="song" placeholder="Song Title (e.g. Lover by Taylor Swift)" required style="margin-right: 10px; padding: 5px;" />
+      <input type="text" id="scene" placeholder="Scene (e.g. when Adam first touched Juliette)" required style="padding: 5px;" />
+      <button type="submit" style="margin-top: 10px; padding: 6px 12px; background-color: #444; color: white; border: none; border-radius: 4px;">Add Suggestion</button>
+    </form>
   </div>
 
   <a class="back-btn" href="index.html">← Back to Search</a>
@@ -262,6 +290,37 @@
       const cardWidth = card.offsetWidth + 20; // includes margin/gap
       carousel.scrollLeft += direction * cardWidth;
     }
+  </script>
+  <script>
+    const form = document.getElementById("suggestionForm");
+    const suggestionsList = document.getElementById("suggestionsList");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const song = document.getElementById("song").value.trim();
+      const scene = document.getElementById("scene").value.trim();
+
+      if (!username || !song || !scene) return;
+
+      const suggestion = document.createElement("div");
+      suggestion.style.marginBottom = "15px";
+      suggestion.style.borderBottom = "1px solid #333";
+      suggestion.style.paddingBottom = "10px";
+
+      suggestion.innerHTML = `
+        <p><strong>${username}</strong> suggested <em>${song}</em></p>
+        <p><small>“${scene}”</small></p>
+      `;
+
+      suggestionsList.prepend(suggestion); // Add to top
+
+      // Clear form fields
+      document.getElementById("username").value = "";
+      document.getElementById("song").value = "";
+      document.getElementById("scene").value = "";
+    });
   </script>
 
 </body>
