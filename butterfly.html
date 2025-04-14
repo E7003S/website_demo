@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BookMorphosis - Find Your Next Great Read</title>
+  <!-- Adding Google Font for a whimsical look similar to Carolyna -->
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background-color: black;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .button-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+    }
+    .button-container button {
+      padding: 8px 18px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .button-container button:hover {
+      background-color: rgba(0, 255, 153, 0.2);
+      box-shadow: 0 0 10px #00ff99;
+      color: #00ff99;
+    }
+    .site-title {
+      position: absolute;
+      bottom: 50px;
+      width: 100%;
+      text-align: center;
+      font-size: 3.5rem;
+      font-weight: 400;
+      font-family: 'Parisienne', cursive;
+      color: #00ff99;
+      letter-spacing: 1px;
+      text-shadow: 0 0 12px rgba(0, 255, 153, 0.6);
+      animation: fadeIn 2s ease-in-out forwards;
+      opacity: 0;
+      z-index: 5;
+      text-decoration: none; /* Removes underline */
+    }
+    .site-subtitle {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #00ff99;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(0, 255, 153, 0.3);
+      animation: fadeIn 2.5s ease-in-out forwards;
+      opacity: 0;
+      z-index: 5;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @media (max-width: 500px) {
+      .button-container {
+        flex-direction: column;
+        top: 10px;
+        right: 10px;
+        gap: 6px;
+      }
+      .button-container button {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+      .site-title {
+        font-size: 2.2rem;
+      }
+      .site-subtitle {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Canvas for butterfly -->
+  <canvas id="butterflyCanvas"></canvas>
+  <!-- Title below butterfly -->
+  <a href="second.html" class="site-title">BookMorphosis</a>
+
+  <div class="site-subtitle">Find Your Next Great Read</div>
+  <script>
+    const canvas = document.getElementById("butterflyCanvas");
+    const ctx = canvas.getContext("2d");
+  
+    let scale;
+    function updateScale() {
+      const baseWidth = 1440;
+      scale = Math.min(window.innerWidth / baseWidth * 70, 80);
+    }
+  
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      updateScale();
+    }
+  
+    window.addEventListener('resize', resize);
+    resize();
+  
+    let t = 0;
+    const speed = 0.03;
+    let trail = [];
+  
+    function butterfly(t) {
+      const x = Math.sin(t) * (Math.exp(Math.cos(t)) - 2 * Math.cos(4 * t) - Math.pow(Math.sin(t / 12), 5));
+      const y = Math.cos(t) * (Math.exp(Math.cos(t)) - 2 * Math.cos(4 * t) - Math.pow(Math.sin(t / 12), 5));
+      return [x * scale, -y * scale];
+    }
+  
+    function animate() {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2.2;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.07)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const [x, y] = butterfly(t);
+      trail.push({ x: centerX + x, y: centerY + y });
+      if (trail.length > 2000) trail.shift();
+      ctx.beginPath();
+      for (let i = 0; i < trail.length; i++) {
+        const p = trail[i];
+        ctx.lineTo(p.x, p.y);
+      }
+      ctx.strokeStyle = `hsl(${(t * 30) % 360}, 100%, 70%)`;
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+      t += speed;
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>  
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shatter Me | Book Info</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #121212;
+      color: #f0f0f0;
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .main-content {
+      flex: 2;
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .infobox {
+      flex: 1;
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      text-align: center;
+    }
+
+    .infobox img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .infobox h3 {
+      margin-top: 0;
+      color: #ffc107;
+    }
+
+    h1, h3 {
+      color: #ffffff;
+    }
+
+    p {
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    a {
+      color: #90caf9;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 20px auto;
+      text-align: center;
+      color: #ffffff;
+      background: #333;
+      padding: 10px 20px;
+      border-radius: 6px;
+      width: fit-content;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      background: #444;
+    }
+
+    .info-box {
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 30px auto;
+      color: white;
+      max-width: 1000px;
+      box-sizing: border-box;
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .character-carousel {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 10px 0;
+    }
+
+    .character-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .character-card {
+      flex: 0 0 auto;
+      background-color: #2a2a2a;
+      padding: 15px;
+      border-radius: 10px;
+      width: 160px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .character-card:hover {
+      transform: scale(1.05);
+    }
+
+    .character-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .character-card p {
+      margin: 0;
+      color: #fff;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .arrow-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .arrow-left {
+      left: 0;
+    }
+
+    .arrow-right {
+      right: 0;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .arrow-btn {
+        width: 28px;
+        height: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="main-content">
+      <h1>Shatter Me (Shatter Me)</h1>
+      <h3>by Tahereh Mafi</h3>
+      <p>
+        I have a curse
+        I have a gift
+
+        I am a monster
+        I'm more than human
+
+        My touch is lethal
+        My touch is power
+
+        I am their weapon
+        I will fight back
+
+        Juliette hasn't touched anyone in exactly 264 days.
+
+        The last time she did, it was an accident, but The Reestablishment locked her up for murder. No one knows why Juliette's touch is fatal. As long as she doesn't hurt anyone else, no one really cares. The world is too busy crumbling to pieces to pay attention to a 17-year-old girl. Diseases are destroying the population, food is hard to find, birds don't fly anymore, and the clouds are the wrong color.
+
+        The Reestablishment said their way was the only way to fix things, so they threw Juliette in a cell. Now so many people are dead that the survivors are whispering war—and The Reestablishment has changed its mind. Maybe Juliette is more than a tortured soul stuffed into a poisonous body. Maybe she's exactly what they need right now.
+
+        Juliette has to make a choice: Be a weapon. Or be a warrior.
+      </p>
+    </div>
+
+    <div class="infobox">
+      <img src="img/WhatsApp Image 2025-04-13 at 15.20.13.jpeg" alt="Shatter Me Book Cover">
+      <h3>Book Info</h3>
+      <p><strong>Title:</strong> Shatter Me (Shatter Me)</p>
+      <p><strong>Author:</strong> Tahereh Mafi</p>
+      <p><strong>Genre:</strong> Fiction</p>
+      <p><strong>Status:</strong> Published</p>
+    </div>
+  </div>
+
+  <!-- GENRES SECTION -->
+  <div class="info-box">
+    <h3>Genres</h3>
+    <p>Romance, Science Fiction, Dystopian, Young Adult, Fantasy</p>
+  </div>
+
+  <!-- CHARACTERS SLIDESHOW -->
+  <div class="info-box">
+    <h3>Main Characters</h3>
+    <div class="carousel-wrapper">
+      <button class="arrow-btn arrow-left" onclick="scrollCarousel(-1)">&#10094;</button>
+      <div class="character-carousel" id="carousel">
+        <div class="character-card">
+          <img src="https://via.placeholder.com/150x200?text=Juliette" alt="Juliette Ferrars" />
+          <p>Juliette Ferrars</p>
+        </div>
+        <div class="character-card">
+          <img src="https://via.placeholder.com/150x200?text=Warner" alt="Aaron Warner" />
+          <p>Aaron Warner</p>
+        </div>
+        <div class="character-card">
+          <img src="https://via.placeholder.com/150x200?text=Adam" alt="Adam Kent" />
+          <p>Adam Kent</p>
+        </div>
+        <div class="character-card">
+          <img src="https://via.placeholder.com/150x200?text=Kenji" alt="Kenji Kishimoto" />
+          <p>Kenji Kishimoto</p>
+        </div>
+        <div class="character-card">
+          <img src="https://via.placeholder.com/150x200?text=James" alt="James Kent" />
+          <p>James Kent</p>
+        </div>
+        <div class="character-card">
+          <img src="https://via.placeholder.com/150x200?text=Castle" alt="Castle" />
+          <p>Castle</p>
+        </div>
+      </div>
+      <button class="arrow-btn arrow-right" onclick="scrollCarousel(1)">&#10095;</button>
+    </div>
+  </div>
+
+  <a class="back-btn" href="index.html">← Back to Search</a>
+
+  <script>
+    function scrollCarousel(direction) {
+      const carousel = document.getElementById('carousel');
+      const card = carousel.querySelector('.character-card');
+      const cardWidth = card.offsetWidth + 20; // includes margin/gap
+      carousel.scrollLeft += direction * cardWidth;
+    }
+  </script>
+
+</body>
+</html>
